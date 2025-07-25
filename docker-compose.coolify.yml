@@ -1,0 +1,60 @@
+services:
+  # Disable Caddy entirely for Coolify deployment
+  caddy:
+    deploy:
+      replicas: 0
+
+  # Reset ports for all services that have them
+  flowise:
+    ports: !reset null
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flowise.rule=Host(`flowise.${DOMAIN}`)"
+      - "traefik.http.services.flowise.loadbalancer.server.port=3001"
+
+  open-webui:
+    ports: !reset null
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.open-webui.rule=Host(`webui.${DOMAIN}`)"
+      - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
+
+  n8n:
+    ports: !reset null
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.n8n.rule=Host(`n8n.${DOMAIN}`)"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+
+  langfuse-web:
+    ports: !reset null
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.langfuse.rule=Host(`langfuse.${DOMAIN}`)"
+      - "traefik.http.services.langfuse.loadbalancer.server.port=3000"
+
+  # Supabase services
+  kong:
+    ports: !reset null
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.supabase.rule=Host(`supabase.${DOMAIN}`)"
+      - "traefik.http.services.supabase.loadbalancer.server.port=8000"
+
+  supavisor:
+    ports: !reset null
+
+  # Other services that might have ports
+  neo4j:
+    ports: !reset null
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.neo4j.rule=Host(`neo4j.${DOMAIN}`)"
+      - "traefik.http.services.neo4j.loadbalancer.server.port=7474"
+
+  searxng:
+    ports: !reset null
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.searxng.rule=Host(`search.${DOMAIN}`)"
+      - "traefik.http.services.searxng.loadbalancer.server.port=8080"
